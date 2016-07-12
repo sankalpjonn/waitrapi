@@ -1,0 +1,20 @@
+{
+  "name": "waitr",
+  "version": "1.0.0",
+  "description": "virtual waiter",
+  "main": "app.js",
+  "dependencies": {
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
+    "parse-dashboard": "^1.0.14",
+    "parse-server": "^2.2.16",
+    "path": "^0.12.7",
+    "pug": "^2.0.0-beta3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node waitr"
+  },
+  "author": "sankalp",
+  "license": "ISC"
+}
