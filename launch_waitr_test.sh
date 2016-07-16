@@ -1,0 +1,1 @@
+INSTANCE=debug SERVER_URL=http://ec2-54-191-243-202.us-west-2.compute.amazonaws.com/waitr DASHBOARD_USERNAME=waitradmin DASHBOARD_USERNAME=waitradmin DASHBOARD_PASSWORD=byebyewaiter2016 APP_ID=f46b5cb61ab957a85c62318b01a1fe05 DATABASE_URI=mongodb://localhost:27017/waitrtest pm2 start /opt/waitr/waitr.js
