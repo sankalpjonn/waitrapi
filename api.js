@@ -36,7 +36,7 @@ function getOrders(params, callback)
   {
       query.notEqualTo("status", 3)
   }
-  else if(param["status"] == "completed"))
+  else if(param["status"] == "completed")
   {
       query.equalTo("status", 3)
   }
