@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"waitrtest.Menu"},{"v":1,"key":{"category":1.0,"nonVeg":1.0},"name":"category_1_nonVeg_1","ns":"waitrtest.Menu"}]}
