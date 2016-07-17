@@ -21,16 +21,18 @@ function getMenuItems(businessId, callback)
   });
 }
 
-function getOrders(businessId, callback)
+function getOrders(params, callback)
 {
   var query = new Parse.Query("Order");
   var start = new Date();
   start.setHours(0,0,0,0);
+
   query.equalTo("businessId", {
       __type: "Pointer",
       className: "Business",
-      objectId: businessId
+      objectId: params.businessId
   });
+  query.equalTo("status", params['status'])
   query.greaterThan("createdAt", start)
   query.find({
     success: function(results) {
@@ -51,7 +53,7 @@ Parse.Cloud.define('business-orders', function(req, res){
   // getting all orders placed on the current day
   if(req.user)
   {
-    getOrders(req.params.businessId, function(result, error){
+    getOrders(req.params, function(result, error){
       if(error)
       {
         res.success({"status": "failure", "error": error})
