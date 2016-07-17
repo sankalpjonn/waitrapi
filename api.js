@@ -32,7 +32,14 @@ function getOrders(params, callback)
       className: "Business",
       objectId: params.businessId
   });
-  query.equalTo("status", params['status'])
+  if(param["status"] == "pending")
+  {
+      query.notEqualTo("status", 3)
+  }
+  else if(param["status"] == "completed"))
+  {
+      query.equalTo("status", 3)
+  }
   query.greaterThan("createdAt", start)
   query.find({
     success: function(results) {
