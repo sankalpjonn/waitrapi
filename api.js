@@ -92,7 +92,7 @@ Parse.Cloud.define('user-businessmenu', function(req, res){
       res.success({"status": "failure"})
     }
     else {
-      res.success({"status": "success", "orders": result})
+      res.success({"status": "success", "items": result})
     }
   });
 });
