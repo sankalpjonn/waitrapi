@@ -75,7 +75,11 @@ function constructOrderText(orderData, businessId, callback)
         var quantity = orderData[cntr]['itemQuantity'];
         query.get(orderData[cntr]['itemId'], {
           success: function(menu) {
-            text += "" + quantity + " X " + menu.toJSON()['name'] + " Rs. " +  menu.toJSON()['price'] + "\n"
+            text += "" + quantity + " X " + menu.toJSON()['name'] + " Rs. " +  menu.toJSON()['price'];
+            if(menu.toJSON()['additional'])
+              text += " *NEW ITEM* " + "\n"
+            else
+              text += "\n"
             total += menu.toJSON()['price'] * quantity;
             // console.log(total)
           },
