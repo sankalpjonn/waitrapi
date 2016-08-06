@@ -63,9 +63,9 @@ function getOrders(businessId, status, callback)
 function constructOrderText(orderData, businessId, callback)
 {
   var text = ""
-  var i = 0;
+  var j = 0;
   var total = 0
-  for(i=0; i<orderData.length; i++)
+  for(var i=0; i<orderData.length; i++)
   {
     (function(cntr) {
         // here the value of i was passed into as the argument cntr
@@ -73,14 +73,16 @@ function constructOrderText(orderData, businessId, callback)
         // iteration of the loop can have it's own value
         var query = new Parse.Query("Menu");
         var quantity = orderData[cntr]['itemQuantity'];
+        var additional = orderData[cntr]['additional']
         query.get(orderData[cntr]['itemId'], {
           success: function(menu) {
             text += "" + quantity + " X " + menu.toJSON()['name'] + " Rs. " +  menu.toJSON()['price'];
-            if(menu.toJSON()['additional'])
+            if(additional)
               text += " *NEW ITEM* " + "\n"
             else
               text += "\n"
             total += menu.toJSON()['price'] * quantity;
+            j += 1
             // console.log(total)
           },
           error: function(object, error) {
@@ -92,7 +94,7 @@ function constructOrderText(orderData, businessId, callback)
     })(i);
   }
   var interval = setInterval(function(){
-    if(i == orderData.length)
+    if(j == orderData.length)
     {
       clearInterval(interval);
       text += "Total : Rs. " + total
