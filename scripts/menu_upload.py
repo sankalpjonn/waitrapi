@@ -9,6 +9,10 @@ def getConfigObject(instance):
         configObj['appid'] = 'waitrtestappid'
         configObj['serverurl'] = 'http://localhost:1337/waitr'
         configObj['restapikey'] = 'waitrtestrestapikey'
+    elif instance == "debug":
+	configObj['appid'] = 'waitrtestappid'
+        configObj['serverurl'] = 'http://ec2-54-191-243-202.us-west-2.compute.amazonaws.com/waitr'
+        configObj['restapikey'] = 'waitrtestrestapikey'
     return configObj
 
 
