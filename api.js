@@ -12,48 +12,51 @@ var OrderStatuses = {
 function getCustomizationData(items, callback)
 {
   var j = 0;
-  vat customizations = []
-  (function(cntr) {
-      // here the value of i was passed into as the argument cntr
-      // and will be captured in this function closure so each
-      // iteration of the loop can have it's own value
-      var query = new Parse.Query("Customization")
-      query.limit = 1000;
-      query.equalTo("itemId", {
-          __type: "Pointer",
-          className: "Menu",
-          objectId: items[cntr]['objectId']
-      });
-      query.find({
-        success: function(customizations) {
-            if(customizations.length > 0)
-            {
-              var categoryHashMap = {};
-              for(var k=0; k<customizations.length; k++)
+  var customizations = []
+  for(var i=0; i<items.length; i++)
+  {
+    (function(cntr) {
+        // here the value of i was passed into as the argument cntr
+        // and will be captured in this function closure so each
+        // iteration of the loop can have it's own value
+        var query = new Parse.Query("Customization")
+        query.limit = 1000;
+        query.equalTo("itemId", {
+            __type: "Pointer",
+            className: "Menu",
+            objectId: items[cntr]['objectId']
+        });
+        query.find({
+          success: function(customizations) {
+              if(customizations.length > 0)
               {
-                if(categoryHashMap[customizations[k]['category']])
+                var categoryHashMap = {};
+                for(var k=0; k<customizations.length; k++)
                 {
-                  categoryHashMap[customizations[k]['category']]['values'].push({"name": customizations[k]['name'], "price": customizations[k]['price']})
+                  if(categoryHashMap[customizations[k]['category']])
+                  {
+                    categoryHashMap[customizations[k]['category']]['values'].push({"name": customizations[k]['name'], "price": customizations[k]['price']})
+                  }
+                  else {
+                    categoryHashMap[customizations[k]['category']] = {"type": customizations[k]['type'], "values": [{"name": customizations[k]['name'], "price": customizations[k]['price']}]}
+                    if(customizations[k]['min'])
+                      categoryHashMap[customizations[k]['category']]['min'] = customizations[k]['min']
+                    if(customizations[k]['max'])
+                      categoryHashMap[customizations[k]['category']]['max'] = customizations[k]['max']
+                  }
                 }
-                else {
-                  categoryHashMap[customizations[k]['category']] = {"type": customizations[k]['type'], "values": [{"name": customizations[k]['name'], "price": customizations[k]['price']}]}
-                  if(customizations[k]['min'])
-                    categoryHashMap[customizations[k]['category']]['min'] = customizations[k]['min']
-                  if(customizations[k]['max'])
-                    categoryHashMap[customizations[k]['category']]['max'] = customizations[k]['max']
+                for(var key in categoryHashMap)
+                {
+                  customizations.push({"itemId": customizations[k]['itemId']['objectId'], "category": key, "customization": categoryHashMap[key]})
                 }
               }
-              for(var key in categoryHashMap)
-              {
-                customizations.push({"itemId": customizations[k]['itemId']['objectId'], "category": key, "customization": categoryHashMap[key]})
-              }
+            },
+            error: function(error) {
+              callback(undefined, error)
             }
-          },
-          error: function(error) {
-            callback(undefined, error)
-          }
-      });
-  })(i);
+        });
+    })(i);
+  }
   var interval = setInterval(function(){
     if(j == results.length)
     {
