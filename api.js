@@ -45,10 +45,10 @@ function getCustomizationData(items, callback)
                       categoryHashMap[customizations[k].toJSON()['category']]['max'] = customizations[k].toJSON()['max']
                   }
                 }
-                customizationData[customizations[0]['itemId']['objectId']] = []
+                customizationData[customizations[0].toJSON()['itemId']['objectId']] = []
                 for(var key in categoryHashMap)
                 {
-                  customizationData[customizations[0]['itemId']['objectId']].push({"category": key, "customization": categoryHashMap[key]})
+                  customizationData[customizations[0].toJSON()['itemId']['objectId']].push({"category": key, "customization": categoryHashMap[key]})
                 }
               }
               j += 1
@@ -63,7 +63,7 @@ function getCustomizationData(items, callback)
     if(j == items.length)
     {
       clearInterval(interval);
-      callback(customizations, undefined)
+      callback(customizationData, undefined)
     }
   }, 100);
 }
