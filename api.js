@@ -12,7 +12,7 @@ var OrderStatuses = {
 function getCustomizationData(items, callback)
 {
   var j = 0;
-  var customizations = []
+  var customizationData = {};
   for(var i=0; i<items.length; i++)
   {
     (function(cntr) {
@@ -45,11 +45,13 @@ function getCustomizationData(items, callback)
                       categoryHashMap[customizations[k]['category']]['max'] = customizations[k]['max']
                   }
                 }
+                customizationData[customizations[0]['itemId']['objectId']] = []
                 for(var key in categoryHashMap)
                 {
-                  customizations.push({"itemId": customizations[k]['itemId']['objectId'], "category": key, "customization": categoryHashMap[key]})
+                  customizationData[customizations[0]['itemId']['objectId']].push({"category": key, "customization": categoryHashMap[key]})
                 }
               }
+              j += 1
             },
             error: function(error) {
               callback(undefined, error)
@@ -58,7 +60,7 @@ function getCustomizationData(items, callback)
     })(i);
   }
   var interval = setInterval(function(){
-    if(j == results.length)
+    if(j == items.length)
     {
       clearInterval(interval);
       callback(customizations, undefined)
