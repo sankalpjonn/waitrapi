@@ -24,7 +24,7 @@ function getCustomizationData(items, callback)
         query.equalTo("itemId", {
             __type: "Pointer",
             className: "Menu",
-            objectId: items[cntr]['objectId']
+            objectId: items[cntr].toJSON()['objectId']
         });
         query.find({
           success: function(customizations) {
@@ -33,16 +33,16 @@ function getCustomizationData(items, callback)
                 var categoryHashMap = {};
                 for(var k=0; k<customizations.length; k++)
                 {
-                  if(categoryHashMap[customizations[k]['category']])
+                  if(categoryHashMap[customizations[k].toJSON()['category']])
                   {
-                    categoryHashMap[customizations[k]['category']]['values'].push({"name": customizations[k]['name'], "price": customizations[k]['price']})
+                    categoryHashMap[customizations[k].toJSON()['category']]['values'].push({"name": customizations[k].toJSON()['name'], "price": customizations[k].toJSON()['price']})
                   }
                   else {
-                    categoryHashMap[customizations[k]['category']] = {"type": customizations[k]['type'], "values": [{"name": customizations[k]['name'], "price": customizations[k]['price']}]}
-                    if(customizations[k]['min'])
-                      categoryHashMap[customizations[k]['category']]['min'] = customizations[k]['min']
-                    if(customizations[k]['max'])
-                      categoryHashMap[customizations[k]['category']]['max'] = customizations[k]['max']
+                    categoryHashMap[customizations[k].toJSON()['category']] = {"type": customizations[k].toJSON()['type'], "values": [{"name": customizations[k].toJSON()['name'], "price": customizations[k].toJSON()['price']}]}
+                    if(customizations[k].toJSON()['min'])
+                      categoryHashMap[customizations[k].toJSON()['category']]['min'] = customizations[k].toJSON()['min']
+                    if(customizations[k].toJSON()['max'])
+                      categoryHashMap[customizations[k].toJSON()['category']]['max'] = customizations[k].toJSON()['max']
                   }
                 }
                 customizationData[customizations[0]['itemId']['objectId']] = []
