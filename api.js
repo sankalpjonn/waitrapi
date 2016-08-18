@@ -119,49 +119,6 @@ function getOrders(businessId, status, callback)
     });
 }
 
-function constructOrderText(orderData, businessId, callback)
-{
-  var text = ""
-  var j = 0;
-  var total = 0
-  for(var i=0; i<orderData.length; i++)
-  {
-    (function(cntr) {
-        // here the value of i was passed into as the argument cntr
-        // and will be captured in this function closure so each
-        // iteration of the loop can have it's own value
-        var query = new Parse.Query("Menu");
-        var quantity = orderData[cntr]['itemQuantity'];
-        var additional = orderData[cntr]['additional']
-        query.get(orderData[cntr]['itemId'], {
-          success: function(menu) {
-            text += "" + quantity + " X " + menu.toJSON()['name'] + " Rs. " +  menu.toJSON()['price'];
-            if(additional)
-              text += " *NEW ITEM* " + "\n"
-            else
-              text += "\n"
-            total += menu.toJSON()['price'] * quantity;
-            j += 1
-            // console.log(total)
-          },
-          error: function(object, error) {
-            console.log(error)
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          }
-        });
-    })(i);
-  }
-  var interval = setInterval(function(){
-    if(j == orderData.length)
-    {
-      clearInterval(interval);
-      text += "Total : Rs. " + total
-      callback(text)
-    }
-  }, 100);
-}
-
 //business apis
 Parse.Cloud.define('business-categories', function(req, res){
 
@@ -194,15 +151,6 @@ Parse.Cloud.define('business-orderhistory', function(req, res){
 
 });
 
-
-//before save triggers
-Parse.Cloud.beforeSave("Order", function(request, response){
-  var orderData  = request.object.toJSON().orderData;
-  constructOrderText(orderData, request.object.toJSON().businessId.objectId, function(text){
-      request.object.set("orderText", text);
-      response.success();
-  })
-});
 
 //consumer apis
 Parse.Cloud.define('user-businessmenu', function(req, res){
