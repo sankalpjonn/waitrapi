@@ -62,7 +62,9 @@ function getOrders(businessId, status, callback)
 
 //before save triggers
 Parse.Cloud.beforeSave("Order", function(request, response){
-  var query = Parse.Query("Order");
+  if(!request.object.isNew())
+     response.success();
+  var query = new Parse.Query("Order");
   query.equalTo("businessId", request.object.toJSON()['businessId']);
   query.equalTo("tableNumber", request.object.toJSON()['tableNumber']);
   query.notEqualTo("status", OrderStatuses.ORDER_COMPLETED);
