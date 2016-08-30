@@ -12,8 +12,8 @@ var OrderStatuses = {
 function getMenuItems(businessId, callback)
 {
   var query = new Parse.Query("Menu")
-  query.limit = 1000;
-  query.ascending("category", "nonVeg")
+  query.limit(1000);
+  query.ascending("sortKey","nonVeg")
   query.equalTo("businessId", {
       __type: "Pointer",
       className: "Business",
@@ -64,9 +64,12 @@ function getOrders(businessId, status, callback)
 Parse.Cloud.beforeSave("Order", function(request, response){
   if(!request.object.isNew())
      response.success();
+  var start = new Date();
+  start.setHours(0,0,0,0);
   var query = new Parse.Query("Order");
   query.equalTo("businessId", request.object.toJSON()['businessId']);
   query.equalTo("tableNumber", request.object.toJSON()['tableNumber']);
+  query.greaterThan("createdAt", start);
   query.notEqualTo("status", OrderStatuses.ORDER_COMPLETED);
   query.find({
     success: function(results) {
