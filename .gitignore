@@ -2,3 +2,5 @@ node_modules/*
 logs/*
 newrelic_agent.log
 venv/*
+*.pyc
+*.log
