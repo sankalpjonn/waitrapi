@@ -40,7 +40,20 @@ function getLoyaltyPoints(businessId, userPhoneNo, callback)
     query.equalTo("userPhoneNo", userPhoneNo)
     query.find({
         success: function(results) {
-          callback(results, undefined)
+          if(results.length > 0)
+          {
+            var totalCredit = 0;
+            var totalDebit = 0;
+            for(var i=0; i<results.length; i++)
+            {
+              totalCredit += results[i]['credit']
+              totalDebit += results[i]['debit']
+            }
+            callback({"totalCredit": totalCredit, "totalDebit": totalDebit}, undefined)
+          }
+          else{
+            callback(undefined, undefined)
+          }
         },
         error: function(error) {
           callback(undefined, error)
@@ -131,13 +144,13 @@ Parse.Cloud.define('business-orders', function(req, res){
 Parse.Cloud.define('business-loyaltypoints', function(req, res){
   if(req.user)
   {
-    getLoyaltyPoints(req.user.get('businessId'), req.params['userPhoneNo'], function(result, error){
+    getLoyaltyPoints(req.user.get('businessid'), req.params['userPhoneNo'], function(result, error){
       if(error)
       {
         res.success({"status": "failure", "error": error})
       }
       else {
-        res.success({"status": "success", "loyaltyData": result[0]})
+        res.success({"status": "success", "loyaltyData": result})
       }
     });
   }
