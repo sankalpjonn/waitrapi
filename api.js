@@ -46,8 +46,8 @@ function getLoyaltyPoints(businessId, userPhoneNo, callback)
             var totalDebit = 0;
             for(var i=0; i<results.length; i++)
             {
-              totalCredit += results[i].toJSON()['credit']
-              totalDebit += results[i].toJSON()['debit']
+              totalCredit += results[i].toJSON()['credit'] || 0
+              totalDebit += results[i].toJSON()['debit'] || 0
             }
             callback({"totalCredit": totalCredit, "totalDebit": totalDebit}, undefined)
           }
