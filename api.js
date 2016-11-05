@@ -29,6 +29,25 @@ function getMenuItems(businessId, callback)
   });
 }
 
+function getLoyaltyPoints(businessId, userPhoneNo, callback)
+{
+    var query = new Parse.Query("LoyaltyPoints");
+    query.equalTo("businessId", {
+        __type: "Pointer",
+        className: "Business",
+        objectId: businessId
+    });
+    query.equalTo("userPhoneNo", userPhoneNo)
+    query.find({
+        success: function(results) {
+          callback(results, undefined)
+        },
+        error: function(error) {
+          callback(undefined, error)
+        }
+    });
+}
+
 function getOrders(businessId, status, callback)
 {
   var query = new Parse.Query("Order");
@@ -107,6 +126,26 @@ Parse.Cloud.define('business-orders', function(req, res){
     res.success({"status": "failure", "error": "User not logged in"})
   }
 });
+
+
+Parse.Cloud.define('business-loyaltypoints', function(req, res){
+  if(req.user)
+  {
+    getLoyaltyPoints(req.user.get('businessId'), req.params['userPhoneNo'], function(result, error){
+      if(error)
+      {
+        res.success({"status": "failure", "error": error})
+      }
+      else {
+        res.success({"status": "success", "loyaltyData": result[0]})
+      }
+    });
+  }
+  else {
+    res.success({"status": "failure", "error": "User not logged in"})
+  }
+});
+
 
 Parse.Cloud.define('business-updateorder', function(req, res){
 
